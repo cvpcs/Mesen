@@ -6,8 +6,8 @@
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>Mesen.GUI</RootNamespace>
 		<AssemblyName>Mesen</AssemblyName>
-		<TargetFramework>net45</TargetFramework>
-		<Platforms>AnyCPU;x64;x86</Platforms>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Platforms>AnyCPU;x64;x86;ARM64</Platforms>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<ApplicationRevision>0</ApplicationRevision>
 		<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
@@ -17,15 +17,18 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<UseWindowsForms>true</UseWindowsForms>
 		<Deterministic>false</Deterministic>
+		<RuntimeIdentifier>win10-$(Platform.ToLower())</RuntimeIdentifier>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>false</SelfContained>
+		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Reference Include="System.IO.Compression" />
-		<Reference Include="Microsoft.CSharp" />
-	</ItemGroup>
+	<Target Name="PublishOnBuild" AfterTargets="Build" Condition="'$(PublishSingleFile)' == 'true'">
+		<CallTarget Targets="Publish" />
+	</Target>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Apis.Drive.v3" Version="1.13.0.483" />
+		<PackageReference Include="Google.Apis.Drive.v3" Version="1.51.0.2265" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -1791,7 +1794,9 @@
 			if NOT "PGO Optimize" == "$(Configuration)" (
 				copy "$(SolutionDir)bin\$(Platform)\$(Configuration)\MesenCore.dll" "Dependencies\MesenCore.$(Platform).dll"
 			)
-			copy "MesenUpdater.exe" "Dependencies\MesenUpdater.exe"
+			if NOT "ARM64" == "$(Platform)" (
+				copy "MesenUpdater.exe" "Dependencies\MesenUpdater.exe"
+			)
 			call "$(SolutionDir)bin\AnyCPU\$(Configuration)\DependencyPacker.exe
 		</PreBuildEvent>
 	</PropertyGroup>

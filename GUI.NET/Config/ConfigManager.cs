@@ -20,7 +20,7 @@ namespace Mesen.GUI.Config
 		private static Configuration _dirtyConfig;
 		public static bool DoNotSaveSettings { get; set; }
 
-		public static string DefaultPortableFolder { get { return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location); } }
+		public static string DefaultPortableFolder { get { return Path.GetDirectoryName(AppContext.BaseDirectory); } }
 		public static string DefaultDocumentsFolder
 		{
 			get
@@ -43,7 +43,7 @@ namespace Mesen.GUI.Config
 		public static void InitHomeFolder()
 		{
 			string portableFolder = DefaultPortableFolder;
-			string legacyPortableFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Mesen");
+			string legacyPortableFolder = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), "Mesen");
 			string documentsFolder = DefaultDocumentsFolder;
 			
 			//Linux only
@@ -301,9 +301,9 @@ namespace Mesen.GUI.Config
 			}
 
 			if(Program.IsMono) {
-				System.Diagnostics.Process.Start("mono", "\"" + Assembly.GetEntryAssembly().Location + "\" /delayrestart");
+				System.Diagnostics.Process.Start("mono", "\"" + AppContext.BaseDirectory + "\" /delayrestart");
 			} else {
-				System.Diagnostics.Process.Start(Assembly.GetEntryAssembly().Location, "/delayrestart");
+				System.Diagnostics.Process.Start(AppContext.BaseDirectory, "/delayrestart");
 			}
 		}
 	}

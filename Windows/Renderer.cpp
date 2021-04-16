@@ -580,8 +580,13 @@ void Renderer::DrawPauseScreen(bool disableOverlay)
 		_spriteBatch->Draw(_pOverlaySrv, destRect);
 
 		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
+#if _M_ARM64
+		float x = (float)_screenWidth / 2 - stringDimensions.n128_f32[0] / 2;
+		float y = (float)_screenHeight / 2 - stringDimensions.n128_f32[1] / 2 - 8;
+#else
 		float x = (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2;
 		float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
+#endif
 		DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 
 		string utf8Message = _console->GetSettings()->GetPauseScreenMessage();

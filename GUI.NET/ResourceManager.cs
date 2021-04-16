@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Mesen.GUI.Config;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace Mesen.GUI
 {
@@ -123,13 +124,13 @@ namespace Mesen.GUI
 			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
 						
 			//Extract all needed files
-			string suffix = IntPtr.Size == 4 ? ".x86" : ".x64";
-			foreach(ZipArchiveEntry entry in zip.Entries) {
-				if(entry.Name.StartsWith("MesenCore") && !Program.IsMono && entry.Name.Contains(suffix)) {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name.Replace(suffix, ""));
+			string suffix = IntPtr.Size == 4 ? @"\.(x86|arm)" : @"\.(x64|arm64)";
+			foreach (ZipArchiveEntry entry in zip.Entries) {
+				if(entry.Name.StartsWith("MesenCore") && !Program.IsMono && Regex.IsMatch(entry.Name, suffix, RegexOptions.IgnoreCase)) {
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, Regex.Replace(entry.Name, suffix, string.Empty, RegexOptions.IgnoreCase));
 					ExtractFile(entry, outputFilename);					
 				} else if(entry.Name.StartsWith("libMesenCore") && Program.IsMono && entry.Name.Contains(suffix)) {
-					string outputFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), entry.Name.Replace(suffix, ""));
+					string outputFilename = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), entry.Name.Replace(suffix, ""));
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name);

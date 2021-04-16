@@ -60,7 +60,7 @@ namespace Mesen.GUI.Forms
 			this.DialogResult = DialogResult.Cancel;
 			this.Close();
 #else
-			string destFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+			string destFilePath = AppContext.BaseDirectory;
 			string srcFilePath = Path.Combine(ConfigManager.DownloadFolder, "Mesen." + lblLatestVersionString.Text + ".exe");
 			string backupFilePath = Path.Combine(ConfigManager.BackupFolder, "Mesen." + lblCurrentVersionString.Text + ".exe");
 			string updateHelper = Path.Combine(ConfigManager.HomeFolder, "MesenUpdater.exe");

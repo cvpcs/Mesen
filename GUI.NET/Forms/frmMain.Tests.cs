@@ -136,7 +136,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuRunAllTests_Click(object sender, EventArgs e)
 		{
-			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+			string workingDirectory = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory));
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 			startInfo.FileName = "TestHelper.exe";
 			startInfo.WorkingDirectory = workingDirectory;
@@ -145,7 +145,7 @@ namespace Mesen.GUI.Forms
 
 		private void mnuRunAllGameTests_Click(object sender, EventArgs e)
 		{
-			string workingDirectory = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+			string workingDirectory = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory));
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 			startInfo.FileName = "TestHelper.exe";
 			startInfo.Arguments = "\"" + Path.Combine(ConfigManager.HomeFolder, "TestGames") + "\"";
