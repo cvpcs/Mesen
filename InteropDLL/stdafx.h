@@ -30,7 +30,11 @@
 #ifdef ENVIRONMENT32
 	#define MESEN_LIBRARY_SUFFIX "x86.lib"
 #else 
-	#define MESEN_LIBRARY_SUFFIX "x64.lib"
+   #if _M_ARM64
+       #define MESEN_LIBRARY_SUFFIX "arm64.lib"
+   #else
+	   #define MESEN_LIBRARY_SUFFIX "x64.lib"
+   #endif
 #endif
 
 #if _WIN32 || _WIN64
